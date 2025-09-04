@@ -29,5 +29,7 @@ int main(){
     char str[len];
     cout<<"enter a string:";
     cin.getline(str,len);
+    reverse_string(str);
+    cout<<"reversed string is:"str<<endl;
     return 0;
 }
