@@ -1,196 +1,100 @@
 #include<iostream>
 using namespace std;
-struct Node{
-    int data;
-    Node* next;
-};
-Node* head=nullptr;
-void insertAtBeginning(int value){
-    Node* newnode=new Node{value,nullptr};
-    if(head==nullptr){
-        head=newnode;
-        return;
+#define SIZE 100
+class CircularQueue_Implementation{
+private:
+    int c_qu[SIZE];
+    int front,rear;
+public:
+    CircularQueue_Implementation(){
+        front=-1;
+        rear=-1;
     }
-    newnode->next=head;
-    head=newnode;
-}
-void insertAtEnd(int value){
-    Node* newnode=new Node{value,nullptr};
-    if(head==nullptr){
-        head=newnode;
-        return;
-    }
-    Node* temp=head;
-    while(temp->next!=nullptr) temp=temp->next;
-    temp->next=newnode;
-}
-void insertBefore(int key,int value){
-    if(head==nullptr) return;
-    if(head->data==key){
-        insertAtBeginning(value);
-        return;
-    }
-    Node* temp=head;
-    while(temp->next!=nullptr && temp->next->data!=key){
-        temp=temp->next;
-    }
-    if(temp->next==nullptr) return;
-    Node* newnode=new Node{value,temp->next};
-    temp->next=newnode;
-}
-void insertAfter(int key,int value){
-    Node* temp=head;
-    while(temp!=nullptr && temp->data!=key){
-        temp=temp->next;
-    }
-    if(temp==nullptr) return;
-    Node* newnode=new Node{value,temp->next};
-    temp->next=newnode;
-}
-void deleteBeginning(){
-    if(head==nullptr){
-        cout<<"list is empty\n";
-        return;
-    }
-    Node* temp=head;
-    head=head->next;
-    delete temp;
-}
-void deleteEnd(){
-    if(head==nullptr){
-        cout<<"list is empty\n";
-        return;
-    }
-    else if(head->next==nullptr){
-        delete head;
-        head=nullptr;
-    }
-    else{
-        Node* current=head;
-        while(current->next->next!=nullptr){
-            current=current->next;
-        }
-        delete current->next;
-        current->next=nullptr;
-    }
-}
-void deleteNodevalue(int value){
-    if(head==nullptr){
-        cout<<"list is empty\n";
-        return;
-    }
-    Node* temp=head;
-    Node* pre=nullptr;
-    while(temp!=nullptr && temp->data!=value){
-        pre=temp;
-        temp=temp->next;
-    }
-    if(temp==nullptr){
-        cout<<"element not found\n";
-        return;
-    }
-    if(temp==head){
-        head=head->next;
-    }
-    else if(temp->next==nullptr){
-        pre->next=nullptr;
-    }
-    else{
-        pre->next=temp->next;
-    }
-    delete temp;
-}
-void searchNode(int key){
-    Node* temp=head;
-    int pos=1;
-    while(temp!=nullptr){
-        if(temp->data==key){
-            cout<<"node "<<key<<" found at position "<<pos<<endl;
+    void enqueue(int element){
+        if(isFull()){
+            cout<<"queue is overflowed\n";
             return;
         }
-        temp=temp->next;
-        pos++;
+        rear=(rear+1)%SIZE;
+        c_qu[rear]=element;
+        if(front==-1) front=0;
     }
-    cout<<"node "<<key<<" not found\n";
-}
-void displaylist(){
-    if(head==nullptr){
-        cout<<"list is empty\n";
-        return;
+    void dequeue(){
+        if(isEmpty()){
+            cout<<"queue is underflowed\n";
+            return;
+        }
+        if(front==rear){
+            front=-1;
+            rear=-1;
+        }
+        else front=(front+1)%SIZE;
     }
-    Node* temp=head;
-    cout<<"linked list: ";
-    while(temp!=nullptr){
-        cout<<temp->data<<"->";
-        temp=temp->next;
+    bool isEmpty(){
+        return front==-1;
     }
-    cout<<"NULL\n";
-}
+    bool isFull(){
+        return (rear+1)%SIZE==front;
+    }
+    int peek(){
+        if(isEmpty()){
+            cout<<"queue is empty\n";
+            return -1;
+        }
+        return c_qu[front];
+    }
+    void display(){
+        if(isEmpty()){
+            cout<<"queue is empty\n";
+            return;
+        }
+        cout<<"queue elements: ";
+        int i=front;
+        while(true){
+            cout<<c_qu[i]<<" ";
+            if(i==rear) break;
+            i=(i+1)%SIZE;
+        }
+        cout<<endl;
+    }
+};
 int main(){
-    int choice,value,key;
-    while(true){
-        cout<<"\nMenu:\n";
-        cout<<"1. Insert at beginning\n";
-        cout<<"2. Insert at end\n";
-        cout<<"3. Insert before a node\n";
-        cout<<"4. Insert after a node\n";
-        cout<<"5. Delete from beginning\n";
-        cout<<"6. Delete from end\n";
-        cout<<"7. Delete a specific node\n";
-        cout<<"8. Search for a node\n";
-        cout<<"9. Display all nodes\n";
-        cout<<"0. Exit\n";
-        cout<<"Enter choice: ";
+    CircularQueue_Implementation q1;
+    int choice=0;
+    while(choice!=7){
+        cout<<"Enter\n";
+        cout<<"1. enqueue\n";
+        cout<<"2. dequeue\n";
+        cout<<"3. is Empty\n";
+        cout<<"4. is Full\n";
+        cout<<"5. display\n";
+        cout<<"6. peek\n";
+        cout<<"7. to exit\n";
         cin>>choice;
         switch(choice){
-            case 1:
-                cout<<"Enter value: ";
-                cin>>value;
-                insertAtBeginning(value);
+            case 1:{
+                int element;
+                cout<<"Enter the element you want for enqueue:";
+                cin>>element;
+                q1.enqueue(element);
                 break;
+            }
             case 2:
-                cout<<"Enter value: ";
-                cin>>value;
-                insertAtEnd(value);
+                q1.dequeue();
                 break;
             case 3:
-                cout<<"Enter key: ";
-                cin>>key;
-                cout<<"Enter value to insert before "<<key<<": ";
-                cin>>value;
-                insertBefore(key,value);
+                cout<<(q1.isEmpty()?"queue is EMPTY":"queue is NOT empty")<<endl;
                 break;
             case 4:
-                cout<<"Enter key: ";
-                cin>>key;
-                cout<<"Enter value to insert after "<<key<<": ";
-                cin>>value;
-                insertAfter(key,value);
+                cout<<(q1.isFull()?"queue is FULL":"queue is NOT full")<<endl;
                 break;
             case 5:
-                deleteBeginning();
+                q1.display();
                 break;
             case 6:
-                deleteEnd();
+                cout<<"front element: "<<q1.peek()<<endl;
                 break;
-            case 7:
-                cout<<"Enter node value to delete: ";
-                cin>>key;
-                deleteNodevalue(key);
-                break;
-            case 8:
-                cout<<"Enter node value to search: ";
-                cin>>key;
-                searchNode(key);
-                break;
-            case 9:
-                displaylist();
-                break;
-            case 0:
-                cout<<"Exiting...\n";
-                return 0;
-            default:
-                cout<<"Invalid choice!\n";
         }
     }
+    return 0;
 }
