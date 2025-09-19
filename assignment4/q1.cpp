@@ -14,7 +14,7 @@ void enqueue(int x){
     }
 }
 void dequeue(){
-    if (rear<0 || front>=rear){
+    if (isEmpty()){
         cout<<"queue underflow "<<endl;
         return ;
     }
@@ -27,15 +27,22 @@ bool isfull(){
     return rear==len-1;
 }
 void display(){
-    if(isEmpty()) cout<<"queue is empty"<<endl;
-    return ;
-    cout<<"elements ff queue are:";
-    else{
-        for(int i=front;i<rear;i++){
-            cout<<a[i]<<" ";
-        }
-        
+    if(isEmpty()){
+        cout<<"queue is empty"<<endl;
+        return ;
     }
+    cout<<"elements of queue are:";
+    for(int i=front;i<=rear;i++){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+}
+void peek(){
+    if(isEmpty()){
+        cout<<"queue is empty"<<endl;
+        return ;
+    }
+    cout<<"front element is: "<<a[front]<<endl;
 }
 int main(){
     enqueue(10);
@@ -47,5 +54,11 @@ int main(){
     enqueue(1);
     enqueue(10);
     display();
+    peek();
+    dequeue();
+    dequeue();
+    display();
+    peek();
     return 0;
 }
+
