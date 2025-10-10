@@ -40,15 +40,39 @@ class circularll{
             return ;
         }
         node* temp=head;
-        while(temp->next!=temp){
+        while(temp->next!=head){
             temp=temp->next;
         }
         temp->next=newnode;
         newnode->next=head;
     }
+    void insertAtPosition(int val, int pos) {
+        if(pos< 1) {
+            cout<<"Invalid position.\n";
+            return;
+        }
+
+        if (pos == 1) {
+            insertAtBeginning(val);
+            return;
+        }
+
+        node* newnode = new node(val);
+        node* temp =head;
+        int count=1;
+        while(count<pos-1 && temp->next!=head) {
+            temp = temp->next;
+            count++;
+        }
+        if(count!=pos-1) {
+            cout<<"Position out of range. Inserting at end.\n";
+        }
+        newnode->next = temp->next;
+        temp->next = newnode;
+    }
     void delete_cll(int val){
         node* temp=head;
-        while(temp->next!=val){
+        while(temp->data!=val){
             temp=temp->next;
         }
 
@@ -72,6 +96,10 @@ int main(){
     cll.insertAtBeginning(3);
     cll.insertAtBeginning(1);
     cll.insertatend(2);
+    cll.display();
+    cll.insertatend(4);
+    cll.display();
+    cll.insertAtPosition(7,3);
     cll.display();
     return 0;
 }
