@@ -40,10 +40,25 @@ class solution{
   }
 };
 int main(){
-  Node* root=new Node(1);
-  root->left=new Node(2);
-  root->left->right=new Node(4);
-  root->right=new Node(3);
-  root->right->left=new Node(5);
-  return 0;
+	int root_node;p
+	cout<<"enter root node";
+	Node* root=new Node(cin>>root_node);
+	cout<<"enter choice:/n 1->left node 2-> right node \n,3 ->exit";
+	while(true){
+		int num;
+		cin>>num;
+		if(num==1){
+			cin>>root_node;
+			root->left=new Node(root_node);
+			root=root->left;
+		}
+		if(num==2){
+			cin>>root_node;
+			root->right=new Node(root_node);
+			root=root->right;
+		}
+		else:
+			break;
+	}
+	return 0;
 }
